@@ -221,3 +221,5 @@ __marimo__/
 
 # Data
 data/library.sqlite
+#
+/seed_books.py

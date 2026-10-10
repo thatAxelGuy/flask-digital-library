@@ -29,6 +29,12 @@ def index():
     return render_template("home.html", books=books)
 
 
+def _parse_optional_date(date_str: str) -> date | None:
+    if not date_str:
+        return None
+    return date.fromisoformat(date_str)
+
+
 @app.route("/add_author", methods=["GET", "POST"])
 def add_author():
     """Create a new author from the form submission and render the page."""
@@ -40,13 +46,11 @@ def add_author():
         if name:
             author.name = name
 
-        raw_birthdate = request.form["birthdate"]
-        if raw_birthdate:
-            author.birthdate = date.fromisoformat(raw_birthdate)
+        author.birthdate = _parse_optional_date(request.form["birthdate"])
 
-        raw_date_of_death = request.form["date_of_death"]
-        if raw_date_of_death:
-            author.date_of_death = date.fromisoformat(raw_date_of_death)
+        author.date_of_death = _parse_optional_date(
+            request.form["date_of_death"]
+        )
         try:
             db.session.add(author)
             db.session.commit()
