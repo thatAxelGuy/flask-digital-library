@@ -4,7 +4,7 @@ from datetime import date
 from pathlib import Path
 
 from flask import Flask, render_template, request
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from data_models import Author, Book, db
 
@@ -63,3 +63,59 @@ def add_author():
             message = "Could not save the author. Please try again."
 
     return render_template("add_author.html", message=message)
+
+
+@app.route("/add_book", methods=["GET", "POST"])
+def add_book():
+    """Create a new book from the form submission and render the page."""
+    message = None
+    authors = db.session.execute(db.select(Author)).scalars().all()
+
+    if request.method == "POST":
+        title = request.form["title"].strip()
+        isbn = (
+            request.form["isbn"]
+            .strip()
+            .replace("-", "")
+            .replace(" ", "")
+            .upper()
+        )
+
+        try:
+            publishing_year = int(request.form["publishing_year"])
+        except ValueError:
+            publishing_year = None
+
+        try:
+            # Get author by id
+            author = db.session.get(Author, int(request.form["author_id"]))
+        except ValueError:
+            author = None
+
+        if not title:
+            message = "Title is required."
+        elif not isbn:
+            message = "ISBN is required."
+        elif not publishing_year:
+            message = "Publishing year is required."
+        elif not author:
+            message = "Please choose an existing author."
+        else:
+            book = Book(
+                title=title,
+                isbn=isbn,
+                publishing_year=publishing_year,
+                author=author,
+            )
+            try:
+                db.session.add(book)
+                db.session.commit()
+                message = f"Added {book.title} to the library."
+            except IntegrityError:
+                db.session.rollback()
+                message = "A book with this ISBN already exists."
+            except SQLAlchemyError:
+                db.session.rollback()
+                message = "Could not save the book. Please try again."
+
+    return render_template("add_book.html", message=message, authors=authors)

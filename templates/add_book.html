@@ -1,15 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  </head>
-  <body>
 
-  <form action="/add_author" method="POST">
-  <!-- Add the form here -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body>
+
+  {% if message %}
+  <p>{{ message }}</p>
+  {% endif %}
+  <form action="{{url_for('add_book')}}" method="POST">
+    <label for="title">Book Title:</label>
+    <input type="text" id="title" name="title" required><br><br>
+    <label for="author_id">Author:</label>
+    <select id="author_id" name="author_id" required>
+      {% for author in authors %}
+      <option value="{{ author.id }}">{{ author.name }}</option>
+      {% else %}
+      <option value="" disabled>No authors yet – add one first</option>
+      {% endfor %}
+    </select>
+    <a href="{{ url_for('add_author') }}">Author missing? Add one</a><br><br>
+
+    <label for="isbn">ISBN:</label>
+    <input type="text" id="isbn" name="isbn" required><br><br>
+    <label for="publishing_year">Published:</label>
+    <input type="number" id="publishing_year" name="publishing_year" min="0" max="2100" required><br><br>
+    <input type="submit" value="Add Book">
   </form>
 
-  </body>
+</body>
+
 </html>
