@@ -18,7 +18,7 @@ class Author(db.Model):
         Integer, primary_key=True, autoincrement=True
     )
     name: Mapped[str] = mapped_column(String(200))
-    birthdate: Mapped[date] = mapped_column(Date)
+    birthdate: Mapped[date | None] = mapped_column(Date)
     date_of_death: Mapped[date | None] = mapped_column(Date)
 
     books: Mapped[list["Book"]] = relationship(
