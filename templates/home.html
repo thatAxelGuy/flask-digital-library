@@ -39,8 +39,8 @@
       <nav class="sort" aria-label="Sort books">
         <span>Sort by</span>
         {% for key, label in [("title", "Title"), ("author", "Author"), ("year", "Year")] %}
-        <a href="{{ url_for('index', sort=key, q=search or None) }}"
-          {% if sort == key %}aria-current="true"{% endif %}>{{ label }}</a>
+        <a href="{{ url_for('index', sort=key, q=search or None) }}" {% if sort==key %}aria-current="true" {% endif
+          %}>{{ label }}</a>
         {% endfor %}
       </nav>
     </div>
@@ -64,17 +64,22 @@
             onsubmit='return confirm("Delete " + {{ book.title|tojson }} + "?");'>
             <button type="submit">Delete</button>
           </form>
+          <form class="book-delete" action="{{ url_for('delete_author', author_id=book.author.id) }}" method="post"
+            onsubmit='return confirm("Delete " + {{ book.author.name|tojson }} + " and all their books?");'>
+            <button type="submit">Delete author</button>
+          </form>
+        </div>
         </div>
       </li>
       {% endfor %}
     </ul>
 
     {% if not books %}
-      {% if search %}
-      <p class="empty">No books match "{{ search }}". <a href="{{ url_for('index') }}">Show all books</a></p>
-      {% else %}
-      <p class="empty">Your shelf is empty. <a href="{{ url_for('add_book') }}">Add your first book</a></p>
-      {% endif %}
+    {% if search %}
+    <p class="empty">No books match "{{ search }}". <a href="{{ url_for('index') }}">Show all books</a></p>
+    {% else %}
+    <p class="empty">Your shelf is empty. <a href="{{ url_for('add_book') }}">Add your first book</a></p>
+    {% endif %}
     {% endif %}
   </main>
 </body>

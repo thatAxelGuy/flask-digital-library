@@ -152,5 +152,19 @@ def delete_book(book_id: int):
     else:
         db.session.delete(book)
         db.session.commit()
-        message = f"Successfully deleted {book.title} from library"
+        message = f"Successfully deleted {book.title} from library."
+    return redirect(url_for("index", message=message))
+
+
+@app.route("/author/<int:author_id>/delete", methods=["POST"])
+def delete_author(author_id: int):
+    """Delete author by id if they exist."""
+    message = None
+    author = db.session.get(Author, author_id)
+    if author is None:
+        message = "Author doesn't exist"
+    else:
+        db.session.delete(author)
+        db.session.commit()
+        message = f"Successfully deleted {author.name} from database."
     return redirect(url_for("index", message=message))
