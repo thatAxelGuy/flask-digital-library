@@ -35,16 +35,14 @@ class Book(db.Model):
 
     __tablename__ = "books"
 
-    id: Mapped[int] = mapped_column(
-        Integer, primary_key=True, autoincrement=True
-    )
-    isbn: Mapped[str] = mapped_column(String(20))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    isbn: Mapped[str] = mapped_column(String(20), unique=True)
     title: Mapped[str] = mapped_column(String(200))
-    publishing_year: Mapped[date] = mapped_column(String(10))
+    publishing_year: Mapped[int]
     author_id: Mapped[int] = mapped_column(ForeignKey("authors.id"))
 
     author: Mapped["Author"] = relationship(back_populates="books")
 
     def __repr__(self):
         """Return a readable representation of the book."""
-        return f"Book: name={self.title!r}"
+        return f"Book: name={self.title!r} by {self.author.name!r}"
