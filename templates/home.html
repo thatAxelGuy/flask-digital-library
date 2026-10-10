@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Library</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  </head>
-  <body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>My Library</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
   <h1>My Library</h1>
   <nav>
     <a href="{{ url_for('index') }}">Library</a>
@@ -15,20 +17,26 @@
     <a href="{{ url_for('add_author') }}">Add author</a>
   </nav>
 
+  <p>
+    Sort by:
+    <a href="{{ url_for('index', sort='title') }}">Title</a> ·
+    <a href="{{ url_for('index', sort='author') }}">Author</a> ·
+    <a href="{{ url_for('index', sort='year')}}">Year</a>
+  </p>
+
   {% for book in books %}
-    <div class="book">
-      <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg?default=false"
-      alt="Cover of {{ book.title }}"
-      class="cover"
-      onerror="this.onerror=null; this.src='{{ url_for('static', filename='no-cover.svg') }}'">
-      <div>
-        <h3>{{ book.title }}</h3>
-        <p>by {{ book.author.name }} ({{ book.publishing_year }})</p>
-      </div>
+  <div class="book">
+    <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg?default=false" alt="Cover of {{ book.title }}"
+      class="cover" onerror="this.onerror=null; this.src='{{ url_for('static', filename='no-cover.svg') }}'">
+    <div>
+      <h3>{{ book.title }}</h3>
+      <p>by {{ book.author.name }} ({{ book.publishing_year }})</p>
     </div>
+  </div>
   {% else %}
-    <p>No books yet. <a href="/add_book">Add one</a>.</p>
+  <p>No books yet. <a href="/add_book">Add one</a>.</p>
   {% endfor %}
 
-  </body>
+</body>
+
 </html>

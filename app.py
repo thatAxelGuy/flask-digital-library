@@ -23,9 +23,17 @@ with app.app_context():
 @app.route("/")
 def index():
     """Show the home page."""
-    books = db.session.execute(db.select(Book)).scalars().all()
-    # name = request.args.get("name", "Flask")
-    # return f"Hello, {escape(name)}!"
+    
+    sort = request.args.get("sort", "title")   # sort by "title" is the default
+    stmt = db.select(Book)
+    if sort == "title":
+        stmt = stmt.order_by(Book.title)
+    elif sort == "author":
+        stmt = stmt.join(Book.author).order_by(Author.name, Book.title)
+    elif sort == "year":
+        stmt = stmt.order_by(Book.publishing_year)
+    books = db.session.scalars(stmt).all()
+
     return render_template("home.html", books=books)
 
 
