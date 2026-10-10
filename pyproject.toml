@@ -1,0 +1,31 @@
+[project]
+name = "flask-digital-library"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "flask-sqlalchemy>=3.1.1",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.0",
+]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+extend-select = [
+    "I",    # import sorting
+    "E",    # pycodestyle: PEP 8 style errors
+    "W",    # pycodestyle: style warnings
+    "D",    # pydocstyle: docstring conventions
+    "E501", # Enforce maximum line length
+    "PTH",  # Encourage modern pathlib APIs
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+line-ending = "lf"
