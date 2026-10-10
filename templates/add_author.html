@@ -4,32 +4,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Add an author</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
-  <h1>Add an author</h1>
-  <nav>
-    <a href="{{ url_for('index') }}">Library</a>
-    <a href="{{ url_for('add_book') }}">Add book</a>
-    <a href="{{ url_for('add_author') }}">Add author</a>
-  </nav>
-  {% if message %}
+  <header class="site-header">
+    <p class="site-title"><a href="{{ url_for('index') }}">My Library</a></p>
+    <nav class="site-nav">
+      <a href="{{ url_for('index') }}">Library</a>
+      <a href="{{ url_for('add_book') }}">Add a book</a>
+      <a href="{{ url_for('add_author') }}" aria-current="page">Add an author</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="page-title">Add an author</h1>
+    {% if message %}
     <p class="message">{{ message }}</p>
-  {% endif %}
-  <form action="/add_author" method="POST">
-    <label for="name">Author Name:</label>
-    <input type="text" id="name" name="name" required><br><br>
+    {% endif %}
 
-    <label for="birthdate">Birthdate:</label>
-    <input type="date" id="birthdate" name="birthdate"><br><br>
-    <label for="date_of_death">Date of Death:</label>
-    <input type="date" id="date_of_death" name="date_of_death"><br><br>
-    <input type="submit" value="Add Author">
-  </form>
+    <form class="form" action="{{ url_for('add_author') }}" method="post">
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
 
+      <div class="field">
+        <label for="birthdate">Born</label>
+        <input type="date" id="birthdate" name="birthdate">
+        <span class="hint">Leave empty if unknown</span>
+      </div>
+
+      <div class="field">
+        <label for="date_of_death">Died</label>
+        <input type="date" id="date_of_death" name="date_of_death">
+        <span class="hint">Leave empty if the author is alive or the date is unknown</span>
+      </div>
+
+      <button type="submit" class="button">Add author</button>
+    </form>
+  </main>
 </body>
 
 </html>

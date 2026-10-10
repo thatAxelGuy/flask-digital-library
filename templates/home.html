@@ -4,54 +4,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>My Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
-  <h1>My Library</h1>
-  <nav>
-    <a href="{{ url_for('index') }}">Library</a>
-    <a href="{{ url_for('add_book') }}">Add book</a>
-    <a href="{{ url_for('add_author') }}">Add author</a>
-  </nav>
-{% if message %}
-  <p class="message">{{ message }}</p>
-{% endif %}
-  <p>
-    Sort by:
-    <a href="{{ url_for('index', sort='title') }}">Title</a> ·
-    <a href="{{ url_for('index', sort='author') }}">Author</a> ·
-    <a href="{{ url_for('index', sort='year')}}">Year</a>
-  </p>
-  <form action="{{ url_for('index') }}" method="GET">
-    <label for="search">Search:</label>
-    <input type="text" id="search" name="q" value="{{ search }}">
-    <input type="submit" value="Search">
-  </form>
-  {% for book in books %}
-  <div class="book">
-    <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg?default=false" alt="Cover of {{ book.title }}"
-      class="cover" onerror="this.onerror=null; this.src='{{ url_for('static', filename='no-cover.svg') }}'">
-    <div>
-      <h3>{{ book.title }}</h3>
-      <p>by {{ book.author.name }} ({{ book.publishing_year }})</p>
-      <form action="{{ url_for('delete_book', book_id=book.id) }}" method="post"
-          onsubmit="return confirm('Delete {{ book.title }}?');">
-          <button type="submit">Delete</button>
-      </form>
-      
-    </div>
-  </div>
-  {% else %}
-    {% if search %}
-      <p>No books match "{{ search }}".</p>
-    {% else %}
-      <p>No books yet. <a href="{{ url_for('add_book') }}">Add one</a>.</p>
-    {% endif %}
-  {% endfor %}
+  <header class="site-header">
+    <p class="site-title"><a href="{{ url_for('index') }}">My Library</a></p>
+    <nav class="site-nav">
+      <a href="{{ url_for('index') }}" aria-current="page">Library</a>
+      <a href="{{ url_for('add_book') }}">Add a book</a>
+      <a href="{{ url_for('add_author') }}">Add an author</a>
+    </nav>
+  </header>
 
+  <main>
+    <h1 class="visually-hidden">Books</h1>
+    {% if message %}
+    <p class="message">{{ message }}</p>
+    {% endif %}
+
+    <div class="toolbar">
+      <form class="search" action="{{ url_for('index') }}" method="get" role="search">
+        <label for="search" class="visually-hidden">Search by title or author</label>
+        <input type="search" id="search" name="q" value="{{ search }}" placeholder="Title or author">
+        <input type="hidden" name="sort" value="{{ sort }}">
+        <button type="submit" class="button">Search</button>
+      </form>
+
+      <nav class="sort" aria-label="Sort books">
+        <span>Sort by</span>
+        {% for key, label in [("title", "Title"), ("author", "Author"), ("year", "Year")] %}
+        <a href="{{ url_for('index', sort=key, q=search or None) }}"
+          {% if sort == key %}aria-current="true"{% endif %}>{{ label }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+
+    <ul class="shelf">
+      {% for book in books %}
+      <li class="book">
+        <div class="book-slot">
+          <div class="book-cover">
+            <div class="cover-fallback {{ loop.cycle('cloth-green', 'cloth-oxblood', 'cloth-navy') }}">
+              {{ book.title }}
+            </div>
+            <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg?default=false"
+              alt="Cover of {{ book.title }}" onerror="this.remove()">
+          </div>
+        </div>
+        <div class="book-info">
+          <h2 class="book-title">{{ book.title }}</h2>
+          <p class="book-meta">{{ book.author.name }}, {{ book.publishing_year }}</p>
+          <form class="book-delete" action="{{ url_for('delete_book', book_id=book.id) }}" method="post"
+            onsubmit='return confirm("Delete " + {{ book.title|tojson }} + "?");'>
+            <button type="submit">Delete</button>
+          </form>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% if not books %}
+      {% if search %}
+      <p class="empty">No books match "{{ search }}". <a href="{{ url_for('index') }}">Show all books</a></p>
+      {% else %}
+      <p class="empty">Your shelf is empty. <a href="{{ url_for('add_book') }}">Add your first book</a></p>
+      {% endif %}
+    {% endif %}
+  </main>
 </body>
 
 </html>

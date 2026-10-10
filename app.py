@@ -46,7 +46,7 @@ def index():
     books = db.session.scalars(stmt).all()
 
     return render_template(
-        "home.html", books=books, search=search, message=message
+        "home.html", books=books, search=search, message=message, sort=sort
     )
 
 
