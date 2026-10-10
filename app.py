@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 basedir = Path(__file__).resolve().parent
 data = basedir / "data"
+data.mkdir(exist_ok=True)
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{data}/library.sqlite"
 
 db.init_app(app)
