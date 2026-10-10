@@ -23,7 +23,11 @@
     <a href="{{ url_for('index', sort='author') }}">Author</a> ·
     <a href="{{ url_for('index', sort='year')}}">Year</a>
   </p>
-
+  <form action="{{ url_for('index') }}" method="GET">
+    <label for="search">Search:</label>
+    <input type="text" id="search" name="q" value="{{ search }}">
+    <input type="submit" value="Search">
+  </form>
   {% for book in books %}
   <div class="book">
     <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg?default=false" alt="Cover of {{ book.title }}"
@@ -34,7 +38,11 @@
     </div>
   </div>
   {% else %}
-  <p>No books yet. <a href="/add_book">Add one</a>.</p>
+    {% if search %}
+      <p>No books match "{{ search }}".</p>
+    {% else %}
+      <p>No books yet. <a href="{{ url_for('add_book') }}">Add one</a>.</p>
+    {% endif %}
   {% endfor %}
 
 </body>

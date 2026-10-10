@@ -4,6 +4,7 @@ from datetime import date
 from pathlib import Path
 
 from flask import Flask, render_template, request
+from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from data_models import Author, Book, db
@@ -23,18 +24,27 @@ with app.app_context():
 @app.route("/")
 def index():
     """Show the home page."""
-    
-    sort = request.args.get("sort", "title")   # sort by "title" is the default
-    stmt = db.select(Book)
+    sort = request.args.get("sort", "title")  # sort by "title" is the default
+    search = request.args.get("q", "").strip()
+
+    stmt = db.select(Book).join(Book.author)
+
+    if search:
+        pattern = f"%{search}%"
+        stmt = stmt.where(
+            or_(Book.title.ilike(pattern), Author.name.ilike(pattern))
+        )
+
     if sort == "title":
         stmt = stmt.order_by(Book.title)
     elif sort == "author":
-        stmt = stmt.join(Book.author).order_by(Author.name, Book.title)
+        stmt = stmt.order_by(Author.name, Book.title)
     elif sort == "year":
         stmt = stmt.order_by(Book.publishing_year)
+
     books = db.session.scalars(stmt).all()
 
-    return render_template("home.html", books=books)
+    return render_template("home.html", books=books, search=search)
 
 
 def _parse_optional_date(date_str: str) -> date | None:
