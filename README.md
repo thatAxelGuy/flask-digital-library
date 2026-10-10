@@ -36,7 +36,7 @@ tables are created automatically on first start.
 Without uv, install the dependencies with pip instead (Python 3.10 or newer):
 
 ```bash
-pip install flask flask-sqlalchemy
+pip install -r requirements.txt
 flask run
 ```
 
