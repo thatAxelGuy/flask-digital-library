@@ -4,9 +4,19 @@ from datetime import date
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Date, ForeignKey, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column,
+    relationship,
+)
 
-db = SQLAlchemy()
+
+class Base(DeclarativeBase):
+    """Base class for all models."""
+
+
+db = SQLAlchemy(model_class=Base)
 
 
 class Author(db.Model):
