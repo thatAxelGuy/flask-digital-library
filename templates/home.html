@@ -17,7 +17,10 @@
 
   {% for book in books %}
     <div class="book">
-      <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg?default=false" class="cover">
+      <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg?default=false"
+      alt="Cover of {{ book.title }}"
+      class="cover"
+      onerror="this.onerror=null; this.src='{{ url_for('static', filename='no-cover.svg') }}'">
       <div>
         <h3>{{ book.title }}</h3>
         <p>by {{ book.author.name }} ({{ book.publishing_year }})</p>
