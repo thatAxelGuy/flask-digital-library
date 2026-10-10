@@ -5,12 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Add a book</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
+  <h1>Add a book</h1>
+  <nav>
+    <a href="{{ url_for('index') }}">Library</a>
+    <a href="{{ url_for('add_book') }}">Add book</a>
+    <a href="{{ url_for('add_author') }}">Add author</a>
+  </nav>
 
   {% if message %}
-  <p>{{ message }}</p>
+  <p class="message">{{ message }}</p>
   {% endif %}
   <form action="{{url_for('add_book')}}" method="POST">
     <label for="title">Book Title:</label>

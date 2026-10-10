@@ -1,0 +1,100 @@
+/* Basic styling for the digital library */
+
+body {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  color: #222;
+  background: #fafafa;
+}
+
+h1 {
+  margin-bottom: 0.25rem;
+}
+
+nav {
+  margin-bottom: 1.5rem;
+}
+
+nav a {
+  margin-right: 1rem;
+}
+
+a {
+  color: #2a5db0;
+}
+
+/* Book list on the home page */
+.book {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.book h3 {
+  margin: 0 0 0.25rem;
+}
+
+.book p {
+  margin: 0;
+  color: #555;
+}
+
+.cover {
+  width: 80px;
+  flex-shrink: 0;
+  border-radius: 3px;
+}
+
+/* Forms */
+form {
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+label {
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 0.4rem;
+  margin-top: 0.25rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font: inherit;
+}
+
+input[type="submit"] {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background: #2a5db0;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background: #1f4a8f;
+}
+
+.message {
+  padding: 0.5rem 1rem;
+  background: #eef4ff;
+  border-left: 4px solid #2a5db0;
+}

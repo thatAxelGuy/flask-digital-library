@@ -4,13 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
+  <h1>My Library</h1>
+  <nav>
+    <a href="{{ url_for('index') }}">Library</a>
+    <a href="{{ url_for('add_book') }}">Add book</a>
+    <a href="{{ url_for('add_author') }}">Add author</a>
+  </nav>
 
   {% for book in books %}
-    <div>
-      <h3>{{ book.title }}</h3>
-      <p>by {{ book.author.name }} ({{ book.publishing_year }})</p>
+    <div class="book">
+      <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg?default=false" class="cover">
+      <div>
+        <h3>{{ book.title }}</h3>
+        <p>by {{ book.author.name }} ({{ book.publishing_year }})</p>
+      </div>
     </div>
   {% else %}
     <p>No books yet. <a href="/add_book">Add one</a>.</p>
