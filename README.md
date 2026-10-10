@@ -3,6 +3,14 @@
 A small web app for keeping track of the books I own and their authors, built with
 Flask and Flask-SQLAlchemy on a SQLite database.
 
+## Screenshots
+
+<p>
+  <a href="docs/home.png"><img src="docs/home.png" alt="Library page with books on shelves" width="32%"></a>
+  <a href="docs/add-book.png"><img src="docs/add-book.png" alt="Form to add a book" width="32%"></a>
+  <a href="docs/add-author.png"><img src="docs/add-author.png" alt="Form to add an author" width="32%"></a>
+</p>
+
 ## Features
 
 - Add authors (birth and death dates are optional) and books (with an author dropdown)
