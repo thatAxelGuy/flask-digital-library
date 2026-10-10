@@ -3,7 +3,7 @@
 from datetime import date
 from pathlib import Path
 
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, url_for
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
@@ -24,6 +24,7 @@ with app.app_context():
 @app.route("/")
 def index():
     """Show the home page."""
+    message = request.args.get("message")
     sort = request.args.get("sort", "title")  # sort by "title" is the default
     search = request.args.get("q", "").strip()
 
@@ -44,7 +45,9 @@ def index():
 
     books = db.session.scalars(stmt).all()
 
-    return render_template("home.html", books=books, search=search)
+    return render_template(
+        "home.html", books=books, search=search, message=message
+    )
 
 
 def _parse_optional_date(date_str: str) -> date | None:
@@ -137,3 +140,17 @@ def add_book():
                 message = "Could not save the book. Please try again."
 
     return render_template("add_book.html", message=message, authors=authors)
+
+
+@app.route("/book/<int:book_id>/delete", methods=["POST"])
+def delete_book(book_id: int):
+    """Delete book by id if it exists."""
+    message = None
+    book = db.session.get(Book, book_id)
+    if book is None:
+        message = "Book doesn't exist"
+    else:
+        db.session.delete(book)
+        db.session.commit()
+        message = f"Successfully deleted {book.title} from library"
+    return redirect(url_for("index", message=message))
