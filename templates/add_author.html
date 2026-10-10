@@ -6,7 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
   </head>
   <body>
-
+  {% if message %}
+    <p>{{ message }}</p>
+  {% endif %}
   <form action="/add_author" method="POST">
   <label for="name">Author Name:</label> 
   <input type="text" id="name" name="name" required><br><br>

@@ -7,10 +7,14 @@
   </head>
   <body>
 
-    {% for book in books %}
-    <div> <h3>{{ book.title }}</h3>
+  {% for book in books %}
+    <div>
+      <h3>{{ book.title }}</h3>
+      <p>by {{ book.author.name }} ({{ book.publishing_year }})</p>
     </div>
-    {% endfor %}
+  {% else %}
+    <p>No books yet. <a href="/add_book">Add one</a>.</p>
+  {% endfor %}
 
   </body>
 </html>
